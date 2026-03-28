@@ -40,11 +40,15 @@ class OrderController {
   //delete order by ID
   Future<void> deleteOrder({required String id, required context}) async {
     try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      String? token = sharedPreferences.getString('auth_token');
       //send an HTTP Delete request to delete the order by _id
       http.Response response = await http.delete(
         Uri.parse("$uri/api/orders/$id"),
         headers: <String, String>{
-          "Content-Type": 'application/json; charset=UTF-8'
+          "Content-Type": 'application/json; charset=UTF-8',
+          "x-auth-token": token!,
         },
       );
 
